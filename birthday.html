@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-main: #ff85a1;
+            --pink-light: #ffccd5;
+            --white-soft: #fffafa;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, var(--white-soft) 0%, var(--pink-light) 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Keeps hearts/stars contained */
+        }
+
+        /* Initial Load Animation: Expanding Outwards */
+        .reveal-wrapper {
+            animation: expandOut 1.2s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+            opacity: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        @keyframes expandOut {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Text Section */
+        .text-section {
+            flex: 1;
+            min-width: 320px;
+            text-align: left;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            line-height: 0.85;
+            color: #fff;
+            -webkit-text-stroke: 2px var(--pink-main);
+            text-shadow: 6px 6px 0px var(--pink-main);
+            margin: 0;
+        }
+
+        .birthday-subtext {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--pink-main);
+            margin: 20px 0;
+            font-weight: 800;
+        }
+
+        /* Confetti Button */
+        .confetti-btn {
+            background: var(--pink-main);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0px 6px 0px #d1627d;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .confetti-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 0px #d1627d;
+        }
+
+        .confetti-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0px 2px 0px #d1627d;
+        }
+
+        /* Ballerina Image */
+        .image-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .main-img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            filter: drop-shadow(15px 15px 25px rgba(255, 133, 161, 0.3));
+            animation: float 4s infinite ease-in-out;
+        }
+
+        /* Background Decorations */
+        .decor {
+            position: absolute;
+            color: var(--pink-main);
+            pointer-events: none;
+            animation: pulseFade 3s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(3deg); }
+        }
+
+        @keyframes pulseFade {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @media (max-width: 800px) {
+            .container { flex-direction: column; text-align: center; }
+            .text-section { text-align: center; margin-bottom: 50px; }
+            h1 { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="decorations"></div>
+
+    <div class="reveal-wrapper">
+        <div class="container">
+            <div class="text-section">
+                <h1>Happy<br>Birthday</h1>
+                <div class="birthday-subtext">my cutest pretties little baby</div>
+                <button class="confetti-btn" onclick="fireExtremeConfetti()">my little cappucina &lt;3</button>
+            </div>
+
+            <div class="image-section">
+                <img src="cappucina.png" alt="Ballerina Cappuccina" class="main-img">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Populate Background with Stars and Hearts
+        const decorContainer = document.getElementById('decorations');
+        const icons = ['⭐', '💖', '✨', '🌸', '🤍', '★'];
+        
+        for (let i = 0; i < 40; i++) {
+            const span = document.createElement('span');
+            span.className = 'decor';
+            span.innerText = icons[Math.floor(Math.random() * icons.length)];
+            span.style.left = Math.random() * 100 + 'vw';
+            span.style.top = Math.random() * 100 + 'vh';
+            span.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            span.style.animationDelay = Math.random() * 5 + 's';
+            decorContainer.appendChild(span);
+        }
+
+        // Extreme Confetti Function
+        function fireExtremeConfetti() {
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 10,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff85a1', '#ffffff', '#ffd166']
+                });
+                confetti({
+                    particleCount: 10,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff85a1', '#ffffff', '#ffd166']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Automatic confetti on first load
+        window.onload = () => {
+            setTimeout(() => {
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 }
+                });
+            }, 500);
+        };
+    </script>
+</body>
+</html>
